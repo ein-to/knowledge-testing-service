@@ -15,14 +15,6 @@ from django.db.models import Q
 from collections import Counter
 # Create your views here.
 
-
-def index(request):
-    if request.user.is_authenticated:
-        theme_list = Theme.objects.all()
-        return render(request, 'chang_questionnaire_app/index.html', {'theme_list': theme_list})
-    else:
-        return redirect('user_login')
-
 @csrf_exempt
 def user_login(request):
     if request.method == 'POST':
@@ -43,6 +35,20 @@ def user_login(request):
     else:
         form = LoginForm()
     return render(request, 'chang_questionnaire_app/login.html', {'form': form})
+
+
+def index(request):
+    if request.user.is_authenticated:
+        return render(request, 'chang_questionnaire_app/index.html')
+    else:
+        return redirect('user_login')
+
+def testing_start(request):
+    if request.user.is_authenticated:
+        theme_list = Theme.objects.all()
+        return render(request, 'chang_questionnaire_app/testing_start.html', {'theme_list': theme_list})
+    else:
+        return redirect('user_login')
 
 def logout_request(request):
     logout(request)
@@ -137,15 +143,17 @@ def results(request):
                     data[theme.theme_name] = subdata
                 data_general[username['username']] = data
             return render(request, 'chang_questionnaire_app/results.html', {'data_general': data_general, 'themes': themes})
-        elif result_type == '2':
+        elif result_type == '2' or result_type == '5':
             data_details = []
-            results = Results_details.objects.all().order_by('username', 'theme', 'question_id')
+            if result_type == '2':
+                results = Results_details.objects.all().order_by('username', 'theme', 'question_id')
+            else:
+                results = Results_details.objects.filter(username=request.user.username).order_by('username', 'theme', 'question_id')
             for res in results:
                 sublist = []
                 theme_name = Theme.objects.get(id=res.theme)
                 question = Question.objects.get(theme_id=res.theme, id=res.question_id)
                 answer = Answer.objects.get(question_id=res.question_id, correct=1)
-                print(res.correct)
                 if res.correct == False:
                     correct = 'НЕТ'
                 else:
@@ -156,7 +164,6 @@ def results(request):
                 sublist.append(correct)
                 sublist.append(answer.answer_text)
                 data_details.append(sublist)
-            print(data_details)
             return render(request, 'chang_questionnaire_app/results.html', {'data_details': data_details})
         elif result_type == '3':
             data_incorrect_general = {}
@@ -176,7 +183,6 @@ def results(request):
                     count_list.append(question.question_text)
                 count_list = dict(Counter(count_list))
                 data_incorrect_details[theme.theme_name] = count_list
-            print(data_incorrect_details)
             return render(request, 'chang_questionnaire_app/results.html', {'data_incorrect_details': data_incorrect_details})
         else:
             return render(request, 'chang_questionnaire_app/results.html')

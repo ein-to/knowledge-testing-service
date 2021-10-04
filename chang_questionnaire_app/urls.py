@@ -20,6 +20,7 @@ from . import views
 urlpatterns = [
     path('index/', views.index, name = "index"),
     path('testing/<int:num>/<int:theme_id>/', views.testing, name = "testing"),
+    path('testing_start/', views.testing_start, name = "testing_start"),
     path('', views.user_login, name = 'user_login'),
     path('logout/', views.logout_request, name = 'logout_request'),
     path('results/', views.results, name = 'results'),

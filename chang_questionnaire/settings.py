@@ -12,8 +12,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import ldap
-from django_auth_ldap.config import LDAPSearch
-from .data_settings import ldap_server, ldap_user, ldap_user_passw, ldap_search, allowed_hosts
+from django_auth_ldap.config import LDAPSearch, GroupOfNamesType, NestedGroupOfUniqueNamesType
+from .data_settings import ldap_server, ldap_user, ldap_user_passw, ldap_search, \
+                            allowed_hosts, ldap_group_is_superuser, ldap_group_search
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -118,6 +119,29 @@ AUTH_LDAP_CONNECTION_OPTIONS = {
     ldap.OPT_REFERRALS: 0,
 }
 
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
+    ldap_group_search,
+    ldap.SCOPE_SUBTREE,
+    "(objectClass=groupOfUniqueNames)",
+)
+
+#AUTH_LDAP_GROUP_TYPE = NestedGroupOfUniqueNamesType(name_attr="ou")
+AUTH_LDAP_GROUP_TYPE = GroupOfNamesType()
+
+AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+    #"is_active": "cn=active,ou=django,ou=groups,dc=example,dc=com",
+    #"is_staff": "cn=staff,ou=django,ou=groups,dc=changan,dc=kg",
+    "is_superuser": ldap_group_is_superuser,
+}
+
+AUTH_LDAP_MIRROR_GROUPS = True
+
+AUTH_LDAP_USER_ATTR_MAP = {
+    "first_name": "givenName",
+    "last_name": "sn",
+    "email": "mail"
+}
+#AUTH_LDAP_FIND_GROUP_PERMS  = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/

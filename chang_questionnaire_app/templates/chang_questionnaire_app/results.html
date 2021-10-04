@@ -3,8 +3,8 @@
 {% block content %}
 
 <div class="container">
-  <!-- <div class="div_info"> -->
     <p>Результат:</p>
+  {% if request.user.is_superuser %}
     <form action="{% url 'results' %}" method="GET">
     <select name="result_type" class="form-control1">
         <option value="" selected disabled>Выберите</option>
@@ -16,6 +16,16 @@
     <Br>
     <p><input type="submit"  class="btn btn-info" value="ОК"></p>
     </form>
+  {% else %}
+  <form action="{% url 'results' %}" method="GET">
+  <select name="result_type" class="form-control1">
+      <option value="" selected disabled>Выберите</option>
+      <option value="5">Общий по всем вопросам</option>
+  </select>
+  <Br>
+  <p><input type="submit"  class="btn btn-info" value="ОК"></p>
+  </form>
+  {% endif %}
 
   <table id="sortTable" class="table-striped">
   {% if data_general %}
@@ -111,8 +121,11 @@
       {% endfor %}
       </tbody>
     </table>
+  <!-- {% else %}
+    <h5>Данные не найдены</h5> -->
   {% endif %}
-  </div>
+
+</div>
 
 <style>
   th, td {

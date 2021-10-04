@@ -1,0 +1,23 @@
+{% extends 'chang_questionnaire_app/wrapper.html' %}
+{% load static %}
+{% block content %}
+
+  <title>Тестирование</title>
+   <div class="container">
+     <div class="div_info">
+       <p>Выберите тему:</p>
+     </div>
+        <div class="form-group">
+        <form action="{% url 'testing' 0 0 %}" method="POST">
+          {% csrf_token %}
+        <select name="theme_choice" class="form-control1">
+          {% for theme in theme_list %}
+            <option value="{{ theme.theme_name }}">{{ theme.theme_name }}</option>
+          {% endfor %}
+        </select>
+        <Br>
+        <p><input type="submit"  class="btn btn-info" value="Начать тест"></p>
+        </form>
+   </div>
+
+{% endblock %}
