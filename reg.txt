@@ -1,0 +1,8 @@
+asgiref==3.5.2
+Django==4.0.6
+django-auth-ldap==4.1.0
+pyasn1==0.4.8
+pyasn1-modules==0.2.8
+python-ldap @ file:///C:/Projects/Django/Testing%20service/venv/Scripts/python_ldap-3.4.0-cp39-cp39-win_amd64.whl
+sqlparse==0.4.2
+tzdata==2022.1

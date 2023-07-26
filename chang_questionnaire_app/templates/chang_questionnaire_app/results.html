@@ -1,0 +1,141 @@
+{% extends 'chang_questionnaire_app/wrapper.html' %}
+
+{% block content %}
+
+<div class="container">
+    <p>Результат:</p>
+  {% if request.user.is_superuser %}
+    <form action="{% url 'results' %}" method="GET">
+    <select name="result_type" class="form-control1">
+        <option value="" selected disabled>Выберите</option>
+        <option value="1">Общий по всем сотрудникам</option>
+        <option value="2">Детальный по всем сотрудникам</option>
+        <option value="3">Общий по неправильным ответам</option>
+        <option value="4">Детальный по неправильным ответам</option>
+    </select>
+    <Br>
+    <p><input type="submit"  class="btn btn-info" value="ОК"></p>
+    </form>
+  {% else %}
+  <form action="{% url 'results' %}" method="GET">
+  <select name="result_type" class="form-control1">
+      <option value="" selected disabled>Выберите</option>
+      <option value="5">Общий по всем вопросам</option>
+  </select>
+  <Br>
+  <p><input type="submit"  class="btn btn-info" value="ОК"></p>
+  </form>
+  {% endif %}
+
+  <table id="sortTable" class="table-striped">
+  {% if data_general %}
+    <thead>
+      <tr>
+        <th style='border:none;'></th>
+        <th style='border:none;'></th>
+        {% for t in themes  %}
+          <th  colspan="2">{{ t.theme_name }}</th>
+        {% endfor %}
+      </tr>
+      <tr>
+        <th>#</th>
+        <th>Ответы:</th>
+        {% for t in themes  %}
+          <th>Правильные</th>
+          <th>Неправильные</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for key,value in data_general.items %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ key }}</td>
+          {% for k,v in value.items %}
+            <td>{{ v.correct }}</td>
+            <td>{{ v.incorrect }}</td>
+          {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+  {% if data_details %}
+      <thead>
+      <tr>
+        <th >Пользователь</th>
+        <th >Тема</th>
+        <th >Вопрос</th>
+        <th >Правильно</th>
+        <th >Правильный ответ</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for list in data_details %}
+        <tr>
+            {% for i in list %}
+                <td>{{ i }}</td>
+            {% endfor %}
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+
+  {% if data_incorrect_general %}
+      <thead>
+      <tr>
+        <th>Тема</th>
+        <th>Количество неправильных ответов</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for key, value in data_incorrect_general.items %}
+        <tr>
+          <td>{{ key }}</td>
+          <td>{{ value }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+
+  {% if data_incorrect_details %}
+      <thead>
+        <tr>
+          <th>Тема</th>
+          <th>Вопрос</th>
+          <th>Количество неправильных ответов</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for key, value in data_incorrect_details.items %}
+            {% for k,v in value.items %}
+              <tr>
+                <td>{{ key }}</td>
+                <td>{{ k }}</td>
+                <td>{{ v }}</td>
+              </tr>
+            {% endfor %}
+      {% endfor %}
+      </tbody>
+    </table>
+  <!-- {% else %}
+    <h5>Данные не найдены</h5> -->
+  {% endif %}
+
+</div>
+
+<style>
+  th, td {
+    padding: 15px;
+    text-align: center;
+    border: 1px solid black;
+    font-size: 14px;
+  }
+}
+</style>
+
+
+{% endblock %}

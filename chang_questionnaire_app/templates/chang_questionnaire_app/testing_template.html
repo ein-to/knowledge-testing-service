@@ -1,0 +1,47 @@
+{% extends 'chang_questionnaire_app/wrapper.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="div_info"><h5>Тема: {{ theme_name }}</h5></div>
+    <div class="div_info"><h5>Вопрос №{{ num }}</h5></div>
+    <div class="div_info"><p>{{ question_text }}</p></div>
+    <p>{{ c }}</p>
+    <p>{{ ic }}</p>
+    <form action="{% url 'testing' num theme_id %}" method="POST">
+      {% csrf_token %}
+      {% for a in answers %}
+      <div id="ck-button" class="row">
+        <label>
+          <input type="checkbox" value="{{ a.answer_text }}" name="checked_answer" id="checked_answer"><span>{{ a.answer_text }}</span>
+        </label>
+      </div>
+      {% endfor %}
+      <p><input type="submit" class="button_submit" value="{{ command }}" id="check"></p>
+      </form>
+</div>
+
+<script>
+  document.getElementById('check').onclick = function() {
+  if(checkboxes = document.querySelectorAll('input[type="checkbox"]:checked').length == 0) {
+    alert('Необходимо отметить минимум один вариант');
+    return false;
+  } if(checkboxes = document.querySelectorAll('input[type="checkbox"]:checked').length > 1) {
+    alert('Необходимо отметить не больше одного варианта');
+    return false;
+  } else {
+    return true;
+    }
+  }
+  //Disable Back Button In All Browsers.
+        function DisableBackButtonAllBrowsers() {
+            window.history.forward()
+        };
+         DisableBackButtonAllBrowsers();
+        window.onload = DisableBackButtonAllBrowsers;
+         window.onpageshow = function (evts) { if (evts.persisted) DisableBackButtonAllBrowsers(); };
+        window.onunload = function () { void (0) };
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'chang_questionnaire_app/wrapper.html' %}
+
+{% block content %}
+<div class="container">
+<div class="div_info">
+  {% if already_tested %}
+    <h2>Вы уже проходили анкетирование на тему <b>{{ theme_name }}.</b></h2>
+    <h2>Необходимо пройти анкетирование на <a href="{% url 'index' %}">другие темы</a>.</h2>
+  {% else %}
+    <h2>Вы ответили на все вопросы на тему <b>{{ theme_name }}.</b></h2>
+    <h2>Необходимо пройти анкетирование на <a href="{% url 'index' %}">другие темы</a>.</h2>
+  {% endif %}
+</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'chang_questionnaire_app/wrapper.html' %}
+{% load static %}
+{% block content %}
+
+  <title>Главная страница</title>
+   <div class="container">
+     <div class="div_info">
+       <p>Что будем делать?</p>
+     </div>
+         <a href="{% url 'testing_start' %}" class="btn btn-info btn-lg active" role="button" aria-pressed="true">Тестирование</a>
+         <!--<a href="{# % url 'results' %}" class="btn btn-info btn-lg active" role="button" aria-pressed="true">Результаты</a>-->
+   </div>
+
+{% endblock %}
