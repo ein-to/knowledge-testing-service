@@ -12,7 +12,7 @@ class Theme(models.Model):
 
 class Question(models.Model):
     theme = models.ForeignKey(Theme, on_delete=models.CASCADE)
-    question_text = models.CharField(max_length=200)
+    question_text = models.CharField(max_length=400)
 
     def __str__(self):
         theme = Theme.objects.get(theme_name=self.theme)
